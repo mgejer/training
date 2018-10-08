@@ -1,5 +1,7 @@
 package arrays;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -19,33 +21,54 @@ public class NewYearChaos {
 
 	static int amountOfPeopleBribed(int[] q) {
 		int minimumBribes = 0;
-		for (int personIndex = 0; personIndex < q.length; personIndex++ ) {
-			int peopledBribed = amountOfPeopleBribedBy(q, personIndex);
+		List<Integer> bribeds = new ArrayList();
 
-			if (peopledBribed <= 2) {
-				minimumBribes += peopledBribed;
-			} else {
+		for (int personIndex = q.length - 1; personIndex >= 0 ; personIndex-- ) {
+
+			if (advancedTooManyPositions(personIndex, q)) {
 				throw new TooManyBribedPeople();
+			} else if (advanced2Positions(personIndex, q)) {
+				minimumBribes += 2;
+			} else if (advanced1Positions(personIndex, q)) {
+				minimumBribes++;
+			} else if (bribedSomeOne(q[personIndex], bribeds)) {
+				minimumBribes++;
 			}
+
+			if (wasBribed(personIndex, q)) {
+				bribeds.add(q[personIndex]);
+			}
+
 		}
 		return minimumBribes;
 	}
 
-	static int amountOfPeopleBribedBy(int[] q, int briberIndex) {
-		int amountOfPeopleBribed = 0;
-
-		for (int personIndex = briberIndex + 1 ; personIndex < q.length; personIndex++ ) {
-			if (q[personIndex] < q[briberIndex]) {
-				amountOfPeopleBribed++;
-			}
-		}
-
-		return amountOfPeopleBribed;
+	private static boolean bribedSomeOne(int person, List<Integer> bribeds) {
+		return bribeds.stream().anyMatch(bribed -> person > bribed);
 	}
 
-	static class TooManyBribedPeople extends RuntimeException {
-
+	private static boolean advanced1Positions(int personIndex, int[] q) {
+		return q[personIndex] == getPositionAsValue(personIndex) + 1;
 	}
+
+	private static boolean advanced2Positions(int personIndex, int[] q) {
+		return q[personIndex] == getPositionAsValue(personIndex) + 2;
+	}
+
+	private static boolean advancedTooManyPositions(int personIndex, int[] q) {
+		return q[personIndex] > getPositionAsValue(personIndex) + 2;
+	}
+
+	private static boolean wasBribed(int personIndex, int[] q) {
+		return q[personIndex] < getPositionAsValue(personIndex);
+	}
+
+	private static int getPositionAsValue(int personIndex) {
+		return personIndex + 1;
+	}
+
+
+	static class TooManyBribedPeople extends RuntimeException {}
 
 	private static final Scanner scanner = new Scanner(System.in);
 
