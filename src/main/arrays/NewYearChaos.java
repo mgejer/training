@@ -22,6 +22,7 @@ public class NewYearChaos {
 	static int amountOfPeopleBribed(int[] q) {
 		int minimumBribes = 0;
 		List<Integer> bribeds = new ArrayList();
+		Integer mostAdvancedBribedPerson = null;
 
 		for (int personIndex = q.length - 1; personIndex >= 0 ; personIndex-- ) {
 
@@ -31,20 +32,20 @@ public class NewYearChaos {
 				minimumBribes += 2;
 			} else if (advanced1Positions(personIndex, q)) {
 				minimumBribes++;
-			} else if (bribedSomeOne(q[personIndex], bribeds)) {
+			} else if (bribedSomeOne(q[personIndex], mostAdvancedBribedPerson)) {
 				minimumBribes++;
 			}
 
-			if (wasBribed(personIndex, q)) {
-				bribeds.add(q[personIndex]);
+			if (wasBribed(personIndex, q) && (mostAdvancedBribedPerson == null || mostAdvancedBribedPerson > q[personIndex])) {
+				mostAdvancedBribedPerson = q[personIndex];
 			}
 
 		}
 		return minimumBribes;
 	}
 
-	private static boolean bribedSomeOne(int person, List<Integer> bribeds) {
-		return bribeds.stream().anyMatch(bribed -> person > bribed);
+	private static boolean bribedSomeOne(int person, Integer bribed) {
+		return bribed != null && person > bribed;
 	}
 
 	private static boolean advanced1Positions(int personIndex, int[] q) {

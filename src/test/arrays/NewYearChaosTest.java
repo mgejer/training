@@ -23,7 +23,7 @@ public class NewYearChaosTest {
 		assertEquals(NewYearChaos.amountOfPeopleBribed(q),  7);
 	}
 
-	@Test
+	@Test(expected = NewYearChaos.TooManyBribedPeople.class)
 	public void amountOfPeopleBribed_TooManyBribed() {
 		int[] q = {2, 5, 1, 3, 4};
 		NewYearChaos.amountOfPeopleBribed(q);
@@ -48,8 +48,8 @@ public class NewYearChaosTest {
 	}
 
 	@Test(expected = NewYearChaos.TooManyBribedPeople.class)
-	public void amountOfPeopleBribed_tooManyBribed() {
+	public void amountOfPeopleBribed_TooManyBribed2() {
 		int[] q = {2, 5, 1, 3, 4};
-		minimumBribes(q);
+		NewYearChaos.amountOfPeopleBribed(q);
 	}
 }
